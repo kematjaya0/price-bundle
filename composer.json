@@ -8,5 +8,19 @@
             "email": "kematjaya0@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "symfony/http-kernel": "^5.4",
+        "symfony/dependency-injection": "^5.4",
+        "symfony/config": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kematjaya\\PriceBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kematjaya\\PriceBundle\\Tests\\": "tests/"
+        }
+    }
 }
