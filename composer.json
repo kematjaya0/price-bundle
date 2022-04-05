@@ -1,0 +1,12 @@
+{
+    "name": "kematjaya/price-bundle",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nur Hidayatullah",
+            "email": "kematjaya0@gmail.com"
+        }
+    ],
+    "require": {}
+}
