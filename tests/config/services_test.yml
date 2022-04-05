@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+        
+    kmj.currency_format:
+        alias: Kematjaya\PriceBundle\Lib\CurrencyFormatInterface
+        public: true
+        
+    kmj.converter:
+        alias: Kematjaya\PriceBundle\Converter\ConverterInterface
+        public: true

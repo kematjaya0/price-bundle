@@ -1,0 +1,30 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        
+    Kematjaya\PriceBundle\Converter\ConverterInterface:
+        class: Kematjaya\PriceBundle\Converter\IndonesianConverter
+
+    Kematjaya\PriceBundle\Lib\CurrencyFormatInterface:
+        class: Kematjaya\PriceBundle\Lib\CurrencyFormat
+        
+    Kematjaya\PriceBundle\EventSubscriber\Form\PriceEventSubscriber: ~
+    
+    Kematjaya\PriceBundle\DataTransformer\PriceDataTransformer:
+        class: Kematjaya\PriceBundle\DataTransformer\PriceDataTransformer
+        
+    Kematjaya\PriceBundle\Type\PriceType: ~
+    
+    Kematjaya\PriceBundle\Twig\PriceExtension:
+        tags: ['twig.extension']
+    
+    Kematjaya\PriceBundle\Twig\ConverterExtension:
+        tags: ['twig.extension']
+        
+    Kematjaya\PriceBundle\Twig\DateFormatExtension:
+        tags: ['twig.extension']
+        
+    Kematjaya\PriceBundle\Lib\AbstractDateFormat:
+        class: Kematjaya\PriceBundle\Lib\IndonesianDateFormat
