@@ -26,7 +26,6 @@ class AppKernelTest extends Kernel
         $loader->load(function (ContainerBuilder $container) use ($loader) {
             $loader->load(__DIR__ . DIRECTORY_SEPARATOR . 'config/config.yml');
             $loader->load(__DIR__ . DIRECTORY_SEPARATOR . 'config/services_test.yml');
-            $loader->load(__DIR__ . DIRECTORY_SEPARATOR . 'config/bundle.yml');
             
             $container->addObjectResource($this);
         });

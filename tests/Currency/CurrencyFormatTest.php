@@ -21,8 +21,7 @@ class CurrencyFormatTest extends WebTestCase
     
     public function testContainer(): ContainerInterface
     {
-        $client = parent::createClient();
-        $container = $client->getContainer();
+        $container = static::getContainer();
         $this->assertInstanceOf(ContainerInterface::class, $container);
         
         return $container;

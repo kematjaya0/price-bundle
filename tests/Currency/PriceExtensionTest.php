@@ -3,6 +3,7 @@
 namespace Kematjaya\PriceBundle\Tests\Currency;
 
 use Kematjaya\PriceBundle\Tests\AppKernelTest;
+use Kematjaya\PriceBundle\Converter\IndonesianConverter;
 use Kematjaya\PriceBundle\Lib\CurrencyFormatInterface;
 use Kematjaya\PriceBundle\Twig\PriceExtension;
 use Kematjaya\PriceBundle\Twig\ConverterExtension;
@@ -21,8 +22,7 @@ class PriceExtensionTest extends WebTestCase
     
     public function testContainer(): ContainerInterface
     {
-        $client = parent::createClient();
-        $container = $client->getContainer();
+        $container = static::getContainer();
         $this->assertInstanceOf(ContainerInterface::class, $container);
         
         return $container;
@@ -53,7 +53,7 @@ class PriceExtensionTest extends WebTestCase
     
     public function testGetTerbilang()
     {
-        $ext = new ConverterExtension(new \Kematjaya\Currency\Converter\IndonesianConverter());
+        $ext = new ConverterExtension(new IndonesianConverter());
         $this->assertEquals("sepuluh ribu", strtolower($ext->getTerbilang(10000)));
         $this->assertEquals("sepuluh", strtolower($ext->getTerbilang(10)));
     }
