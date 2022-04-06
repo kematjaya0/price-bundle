@@ -37,11 +37,11 @@ class CurrencyFormat implements CurrencyFormatInterface
     
     function __construct(ContainerBagInterface $container) 
     {
-        $configs            = $container->get('kmj_currency.currency');
-        $this->currency     = $configs['code'];
-        $this->centLimit    = $configs['cent_limit'];
-        $this->centPoint        = $configs['cent_point'];
-        $this->thousandPoint    = $configs['thousand_point'];
+        $configs            = $container->get('price');
+        $this->currency     = $configs['currency']['code'];
+        $this->centLimit    = $configs['currency']['cent_limit'];
+        $this->centPoint        = $configs['currency']['cent_point'];
+        $this->thousandPoint    = $configs['currency']['thousand_point'];
         
         $this->isValid($this->currency);
     }

@@ -4,10 +4,10 @@ services:
         autoconfigure: true
         public: true
         
-    kmj.currency_format:
-        alias: Kematjaya\PriceBundle\Lib\CurrencyFormatInterface
+    Kematjaya\PriceBundle\Lib\CurrencyFormatInterface:
+        class: Kematjaya\PriceBundle\Lib\CurrencyFormat
         public: true
         
-    kmj.converter:
-        alias: Kematjaya\PriceBundle\Converter\ConverterInterface
+    Kematjaya\PriceBundle\Converter\ConverterInterface:
+        class: Kematjaya\PriceBundle\Converter\IndonesianConverter
         public: true

@@ -20,24 +20,16 @@ class PriceExtensionTest extends WebTestCase
         return AppKernelTest::class;
     }
     
-    public function testContainer(): ContainerInterface
-    {
-        $container = static::getContainer();
-        $this->assertInstanceOf(ContainerInterface::class, $container);
-        
-        return $container;
-    }
-    
     /**
-     * @depends testContainer
      * @param ContainerInterface $container
      * @return CurrencyFormatInterface
      */
-    public function testInstance(ContainerInterface $container): CurrencyFormatInterface
+    public function testInstance(): CurrencyFormatInterface
     {
-        $this->assertTrue($container->has('kmj.currency_format'));
+        $container = static::getContainer();
+        $this->assertTrue($container->has(CurrencyFormatInterface::class));
         
-        return $container->get('kmj.currency_format');
+        return $container->get(CurrencyFormatInterface::class);
     }
     
     /**
