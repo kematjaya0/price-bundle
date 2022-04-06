@@ -7,9 +7,7 @@ Price Type Extension for Symfony 4
 
 2 add to bundles.php
     ```
-    ...
-    Kematjaya\PriceBundle\PriceBundle::class => ["all" => true],
-    ...
+    Kematjaya\PriceBundle\PriceBundle::class => ["all" => true]
     ```
 
 3. Usage
