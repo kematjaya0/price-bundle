@@ -13,6 +13,7 @@ use Kematjaya\PriceBundle\Lib\CurrencyFormat;
 use Kematjaya\PriceBundle\Type\PriceType;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Form\PreloadedExtension;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 /**
  * Description of PriceTypeTest
@@ -25,9 +26,20 @@ class PriceTypeTest extends TypeTestCase
     
     public function setUp(): void 
     {
-        $this->currencyFormatMock = $this->createConfiguredMock(CurrencyFormat::class, [
-            "getCurrencySymbol" => "IDR"
-        ]);
+        $configs = [
+            "currency" => [
+                "code" => "IDR",
+                "cent_limit" => 2,
+                "cent_point" => ",",
+                "thousand_point" => "."
+              ]
+        ];
+        $container = $this->createMock(ContainerBagInterface::class);
+        $container->method("get")
+                ->with("price")
+                ->willReturn($configs);
+        $this->currencyFormatMock = new CurrencyFormat($container);
+        
         parent::setUp();
     }
     
@@ -41,26 +53,29 @@ class PriceTypeTest extends TypeTestCase
     
     public function testSubmitValidData(): void
     {
-        $nilai = "IDR 20000";
-        $expected = (float)20000;
-        $this->currencyFormatMock
-                ->method("priceToFloat")
-                ->with($nilai)
-                ->willReturn($expected);
-        $formData = [
-            'nilai' => $nilai
+        $data = [
+            "IDR 20.300,02" => (float)20300.02,
+            "IDR 20.000,02" => (float)20000.02,
+            "IDR 20.300,52" => (float)20300.52
         ];
-        $data = new TestFormModel();
-        $form = $this->factory->create(TestFormType::class, $data);
-        $form->submit($formData);
-        self::assertTrue($form->isSynchronized());
-        self::assertEquals($expected, $data->getNilai());
+        
+        foreach ($data as $nilai => $expected) {
+            $formData = [
+                'nilai' => $nilai
+            ];
+            $data = new TestFormModel();
+            $form = $this->factory->create(TestFormType::class, $data);
+            $form->submit($formData);
+            self::assertTrue($form->isSynchronized());
+            self::assertEquals($expected, $data->getNilai());
 
-        $view     = $form->createView();
-        $children = $view->children;
+            $view     = $form->createView();
+            $children = $view->children;
 
-        foreach (array_keys($formData) as $key) {
-            self::assertArrayHasKey($key, $children);
+            foreach (array_keys($formData) as $key) {
+                self::assertArrayHasKey($key, $children);
+            }
         }
+            
     }
 }

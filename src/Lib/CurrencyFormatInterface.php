@@ -17,7 +17,7 @@ interface CurrencyFormatInterface
      * @param string $price
      * @return float
      */
-    public function priceToFloat(string $price = ''):float;
+    public function priceToFloat(string $price = '0'):float;
     
     /**
      * Encode / formatting floating number to price format

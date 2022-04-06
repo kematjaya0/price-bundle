@@ -77,11 +77,12 @@ class CurrencyFormat implements CurrencyFormatInterface
         return $this;
     }
     
-    public function priceToFloat(string $price = ''):float
+    public function priceToFloat(string $price = '0'):float
     {
-        $number = (float) str_replace($this->thousandPoint, '', str_replace($this->getCurrencySymbol(), '', $price));
+        $numbers = explode($this->centPoint, str_replace($this->getCurrencySymbol(), '', $price));
+        $numbers[0] = str_replace($this->thousandPoint, '', trim($numbers[0]));
         
-        return $number;
+        return round((float) implode(".", $numbers), $this->centLimit);
     }
     
     public function formatPrice(float $number = 0, int $centLimit = null, string $centPoint = null, string $thousandPoint = null):string
