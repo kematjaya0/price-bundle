@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
  */
-class PriceExtensionTest //extends WebTestCase
+class PriceExtensionTest extends WebTestCase
 {
     public static function getKernelClass() 
     {

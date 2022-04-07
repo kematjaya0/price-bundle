@@ -80,9 +80,9 @@ class PriceType extends MoneyType
             $view->vars['money_pattern'] = sprintf("%s %s", $this->currencyFormat->getCurrencySymbol(), $view->vars['money_pattern']);
         }
         
-       
-        $view->vars['prefix'] = $options['prefix'];
-        $view->vars['suffix'] = $options['suffix'];
+        $view->vars["attr"] = !empty($view->vars['attr']) ? $view->vars['attr'] : ["style" => 'text-align: right'];
+        $view->vars['prefix'] = "";
+        $view->vars['suffix'] = "";
         $view->vars['cents_separator'] = $options['cents-separator'];
         $view->vars['thousands_separator'] = $options['thousands-separator'];
         $view->vars['scale'] = isset($options['scale']) ? $options['scale'] : 0;

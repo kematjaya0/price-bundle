@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
  */
 
-class CurrencyFormatTest //extends WebTestCase 
+class CurrencyFormatTest extends WebTestCase 
 {
     public static function getKernelClass() 
     {
