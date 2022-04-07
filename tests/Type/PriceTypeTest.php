@@ -56,7 +56,8 @@ class PriceTypeTest extends TypeTestCase
         $data = [
             "IDR 20.300,02" => (float)20300.02,
             "IDR 20.000,02" => (float)20000.02,
-            "IDR 20.300,52" => (float)20300.52
+            "IDR 20.300,52" => (float)20300.52,
+            "IDR128.888,45" => (float)128888.45
         ];
         
         foreach ($data as $nilai => $expected) {

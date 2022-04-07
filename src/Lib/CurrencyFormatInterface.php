@@ -27,4 +27,12 @@ interface CurrencyFormatInterface
     public function formatPrice(float $number = 0, int $centLimit = null, string $centPoint = null, string $thousandPoint = null):string;
     
     public function getCurrencySymbol():?string;
+    
+    public function getCentLimit():string;
+    
+    public function getCentPoint(): string;
+        
+    public function getThousandPoint(): string;
+
+    public function getCurrency(): string ;
 }

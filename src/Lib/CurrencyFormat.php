@@ -63,11 +63,27 @@ class CurrencyFormat implements CurrencyFormatInterface
         return $this;
     }
     
+    public function getCentPoint(): string 
+    {
+        return $this->centPoint;
+    }
+
     public function getCentLimit():string
     {
         return $this->centLimit;
     }
     
+    public function getThousandPoint(): string 
+    {
+        return $this->thousandPoint;
+    }
+
+    public function getCurrency(): string 
+    {
+        return $this->currency;
+    }
+
+        
     public function setCurrency(string $currency):self
     {
         $this->isValid($currency);
@@ -79,17 +95,17 @@ class CurrencyFormat implements CurrencyFormatInterface
     
     public function priceToFloat(string $price = '0'):float
     {
-        $numbers = explode($this->centPoint, str_replace($this->getCurrencySymbol(), '', $price));
-        $numbers[0] = str_replace($this->thousandPoint, '', trim($numbers[0]));
+        $numbers = explode($this->getCentPoint(), str_replace($this->getCurrencySymbol(), '', $price));
+        $numbers[0] = str_replace($this->getThousandPoint(), '', trim($numbers[0]));
         
-        return round((float) implode(".", $numbers), $this->centLimit);
+        return round((float) implode(".", $numbers), $this->getCentLimit());
     }
     
     public function formatPrice(float $number = 0, int $centLimit = null, string $centPoint = null, string $thousandPoint = null):string
     {
         $currencyCode = $this->getCurrencySymbol();
         
-        return sprintf("%s %s", $currencyCode,  number_format($number, null !== $centLimit ? $centLimit : $this->centLimit, null !== $centPoint ? $centPoint : $this->centPoint, null !== $thousandPoint ? $thousandPoint : $this->thousandPoint));
+        return sprintf("%s %s", $currencyCode,  number_format($number, null !== $centLimit ? $centLimit : $this->getCentLimit(), null !== $centPoint ? $centPoint : $this->getCentPoint(), null !== $thousandPoint ? $thousandPoint : $this->getThousandPoint()));
     }
     
     protected function isValid(string $currency):bool
