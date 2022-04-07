@@ -26,7 +26,19 @@ class PriceExtension extends AbstractExtension
     public function getFunctions()
     {
         return array(
-            new TwigFunction('price', array($this, 'price'), array('is_safe' => array('html')))
+            new TwigFunction('price', array($this, 'price'), array('is_safe' => array('html'))),
+            new TwigFunction('price_symbol', function () {
+                return $this->currencyFormat->getCurrencySymbol();
+            }),
+            new TwigFunction('thoisand_point', function () {
+                return $this->currencyFormat->getThousandPoint();
+            }),
+            new TwigFunction('cent_point', function () {
+                return $this->currencyFormat->getCentPoint();
+            }),
+            new TwigFunction('cent_limit', function () {
+                return $this->currencyFormat->getCentLimit();
+            })
         );
     }
     

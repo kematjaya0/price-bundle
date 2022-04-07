@@ -39,13 +39,12 @@
         }
         
         $('#{{ id }}').addClass('priceformat');
-        
         $('#{{ id }}').priceFormat({    
             prefix: '{{ prefix }}',
             suffix: '{{ suffix }}',
-            centsSeparator: '{{ cents_separator }}',
-            thousandsSeparator: '{{ thousands_separator }}',
-            centsLimit: parseInt('{{ scale }}')
+            centsSeparator: '{{ cent_point() }}',
+            thousandsSeparator: '{{ thoisand_point() }}',
+            centsLimit: parseInt('{{ cent_limit() }}')
         });
     }
         
