@@ -39,18 +39,13 @@
         }
         
         $('#{{ id }}').addClass('priceformat');
-        $('#{{ id }}').attr('price-prefix', '{{ prefix }}');
-        $('#{{ id }}').attr('price-suffix', '{{ suffix }}');
-        $('#{{ id }}').attr('price-cents-separator', '{{ cents_separator }}');
-        $('#{{ id }}').attr('price-thousands-separator', '{{ thousands_separator }}');
-        $('#{{ id }}').attr('price-cents-limit', {{ scale }});
         
         $('#{{ id }}').priceFormat({    
-            prefix: $('#{{ id }}').attr('price-prefix'),
-            suffix: $('#{{ id }}').attr('price-suffix'),
-            centsSeparator: $('#{{ id }}').attr('price-cents-separator'),
-            thousandsSeparator: $('#{{ id }}').attr('price-thousands-separator'),
-            centsLimit: parseInt('' + $('#{{ id }}').attr('price-cents-limit'))
+            prefix: '{{ prefix }}',
+            suffix: '{{ suffix }}',
+            centsSeparator: '{{ cents_separator }}',
+            thousandsSeparator: '{{ thousands_separator }}',
+            centsLimit: parseInt('{{ scale }}')
         });
     }
         
