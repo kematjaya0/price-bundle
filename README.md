@@ -9,8 +9,16 @@ Price Type Extension for Symfony 4
     ```
     Kematjaya\PriceBundle\PriceBundle::class => ["all" => true]
     ```
-
-3. Usage
+3. add in twig.yaml
+    ```
+    twig:
+    form_themes: 
+        ....
+        - '@Price/bootstrap_4_price_layout.html.twig' ## for bootstrap 4 / 5
+        - '@Price/bootstrap_3_price_layout.html.twig' ## for bootstrap 3
+        ....
+    ```
+4. Usage
     3.1. Form
     ```
     ...
