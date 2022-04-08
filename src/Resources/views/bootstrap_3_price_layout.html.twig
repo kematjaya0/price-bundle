@@ -34,14 +34,27 @@
             return;
         }
         
+        generateCentNumber();
+        
         $('#{{ id }}').addClass('priceformat');
         $('#{{ id }}').priceFormat({    
             prefix: '{{ prefix }}',
             suffix: '{{ suffix }}',
             centsSeparator: '{{ cent_point() }}',
-            thousandsSeparator: '{{ thoisand_point() }}',
+            thousandsSeparator: '{{ thousand_point() }}',
             centsLimit: parseInt('{{ cent_limit() }}')
         });
+    }
+    
+    function generateCentNumber() {
+        let values = $('#{{ id }}').val().split(".");
+        let centValue = (typeof values[1] != "undefined") ?  values[1]: "";
+        for (let i = centValue.length; i < parseInt('{{ cent_limit() }}'); i++) {
+            centValue += "0";
+        }
+        
+        values[1] = centValue;
+        $('#{{ id }}').val(values.join());
     }
         
     </script>

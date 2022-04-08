@@ -30,7 +30,7 @@ class PriceExtension extends AbstractExtension
             new TwigFunction('price_symbol', function () {
                 return $this->currencyFormat->getCurrencySymbol();
             }),
-            new TwigFunction('thoisand_point', function () {
+            new TwigFunction('thousand_point', function () {
                 return $this->currencyFormat->getThousandPoint();
             }),
             new TwigFunction('cent_point', function () {
