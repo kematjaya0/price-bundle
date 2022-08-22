@@ -23,7 +23,7 @@ class PriceExtension extends AbstractExtension
         $this->currencyFormat = $currencyFormat;
     }
     
-    public function getFunctions()
+    public function getFunctions():array
     {
         return array(
             new TwigFunction('price', array($this, 'price'), array('is_safe' => array('html'))),
@@ -42,7 +42,7 @@ class PriceExtension extends AbstractExtension
         );
     }
     
-    public function price($number = 0, int $centLimit = null, string $centPoint = null, string $thousandPoint = null)
+    public function price($number = 0, int $centLimit = null, string $centPoint = null, string $thousandPoint = null):?string
     {
         if (!is_numeric($number)) {
             $number = 0;

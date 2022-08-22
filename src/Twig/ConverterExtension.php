@@ -22,7 +22,7 @@ class ConverterExtension extends AbstractExtension
         $this->converter = $converter;
     }
     
-    public function getFilters()
+    public function getFilters():array
     {
         return [
             new TwigFilter('terbilang', [$this, 'getTerbilang']),

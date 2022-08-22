@@ -36,14 +36,14 @@ class PriceEventSubscriber implements EventSubscriberInterface
         return $this;
     }
     
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents():array
     {
         return [
             FormEvents::PRE_SUBMIT => 'preSubmit'
         ];
     }
     
-    public function preSubmit(FormEvent $event)
+    public function preSubmit(FormEvent $event):void
     {
         $data = $event->getData();
         if ($this->name and isset($data[$this->name])) {

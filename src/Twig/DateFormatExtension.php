@@ -29,7 +29,7 @@ class DateFormatExtension extends AbstractExtension
         $this->dateFormat = $dateFormat;
     }
     
-    public function getFilters()
+    public function getFilters():array
     {
         return [
             new TwigFilter('date_format', [$this->dateFormat, 'format']),
