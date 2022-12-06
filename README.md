@@ -14,7 +14,8 @@ Price Type Extension for Symfony 4
     twig:
     form_themes: 
         ....
-        - '@Price/bootstrap_4_price_layout.html.twig' ## for bootstrap 4 / 5
+        - '@Price/bootstrap_5_price_layout.html.twig' ## for bootstrap 5
+        - '@Price/bootstrap_4_price_layout.html.twig' ## for bootstrap 4
         - '@Price/bootstrap_3_price_layout.html.twig' ## for bootstrap 3
         ....
     ```
