@@ -1,5 +1,5 @@
 {% block money_widget -%}
-    
+    {{- block('price_stylesheet') -}}
     {%- set prepend = not (money_pattern starts with '{{') -%}
     {%- if prepend -%}
         <div class="input-group {{ group_class|default('') }}">
@@ -14,15 +14,29 @@
     
 {%- endblock money_widget %}
 
+{% block price_stylesheet %}
+    <style>
+        #{{ id }} {
+            text-align: right;
+        }
+    </style>
+{% endblock %}
+
 {% block price_javascript %}
     <script type="text/javascript" src="{{ asset('bundles/price/js/jquery.priceFormat.min.js') }}"></script>
     <script>
     
     (function() {
-        priceFormat{{ name|capitalize }}();
+        priceFormat{{ id|capitalize }}();
     })();
 
-    function priceFormat{{ name|capitalize }}() {
+    function priceFormat{{ name|capitalize }}()
+    {
+        priceFormat{{ id|capitalize }}();
+        console.warn("contact your developer, function 'priceFormat{{ name|capitalize }}()' is deprecated, use 'priceFormat{{ id|capitalize }}()' instead");
+    }
+    
+    function priceFormat{{ id|capitalize }}() {
         if (!window.jQuery) {  
             alert("JQuery required");
             return;
