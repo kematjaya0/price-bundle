@@ -68,13 +68,19 @@
 
         function generateCentNumber() {
             let values = $('#{{ id }}').val().split(".");
-            let centValue = (typeof values[1] != "undefined") ?  values[1]: "";
-            for (let i = centValue.length; i < parseInt('{{ cent_limit() }}'); i++) {
+            let centValue = "";;
+            for (let i = 0; i < parseInt('{{ cent_limit() }}'); i++) {
+                if (typeof values[1] != "undefined") {
+                    let chr = values[1].charAt(i);
+                    centValue += chr.length > 0 ? chr : "0";
+                    continue;
+                }
+
                 centValue += "0";
             }
 
             values[1] = centValue;
-            $('#{{ id }}').val(values.join());
+            $('#{{ id }}').val(parseFloat(values.join(".")));
         }
 
     </script>
