@@ -46,7 +46,7 @@
                 return;
             }
 
-            generateCentNumber();
+            generateCentNumber{{ id|capitalize }}();
 
             format{{ id|capitalize }}();
         }
@@ -64,7 +64,7 @@
         }
 
 
-        function generateCentNumber() {
+        function generateCentNumber{{ id|capitalize }}() {
             let values = $('#{{ id }}').val().split(".");
             let centValue = "";;
             for (let i = 0; i < parseInt('{{ cent_limit() }}'); i++) {
