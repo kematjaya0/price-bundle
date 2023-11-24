@@ -10,6 +10,7 @@
         {{- block('form_widget_simple') -}}
     {%- endif -%}
 
+    <div id="{{ id }}_js"></div>
     {{- block('price_javascript') -}}
 
 {%- endblock money_widget %}
@@ -23,11 +24,20 @@
 {% endblock %}
 
 {% block price_javascript %}
-    <script type="text/javascript" src="{{ asset('bundles/price/js/jquery.priceFormat.min.js') }}"></script>
     <script>
 
         (function() {
-            priceFormat{{ id|capitalize }}();
+            if (typeof $('#{{ id }}').priceFormat !== "function") {
+                let scriptEle = document.createElement("script");
+                scriptEle.setAttribute("src", "{{ asset('bundles/price/js/jquery.priceFormat.min.js') }}");
+                document.getElementById('{{ id }}_js').appendChild(scriptEle);
+                scriptEle.addEventListener("load", () => {
+                    priceFormat{{ id|capitalize }}();
+                });
+                return;
+            } else {
+                priceFormat{{ id|capitalize }}();
+            }
         })();
 
         function priceFormat{{ name|capitalize }}() {
@@ -45,7 +55,6 @@
         }
 
         function format{{ id|capitalize }}() {
-            $('#{{ id }}').addClass('priceformat');
             $('#{{ id }}').priceFormat({
                 prefix: '{{ prefix }}',
                 suffix: '{{ suffix }}',
@@ -58,7 +67,7 @@
 
         function generateCentNumber{{ id|capitalize }}() {
             let values = $('#{{ id }}').val().split(".");
-            let centValue = "";;
+            let centValue = "";
             for (let i = 0; i < parseInt('{{ cent_limit() }}'); i++) {
                 if (typeof values[1] != "undefined") {
                     let chr = values[1].charAt(i);
@@ -70,7 +79,7 @@
             }
 
             values[1] = centValue;
-            $('#{{ id }}').val(parseFloat(values.join(".")));
+            $('#{{ id }}').val(values.join("."));
         }
 
     </script>

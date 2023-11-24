@@ -50,7 +50,7 @@ class PriceType extends MoneyType
 
                     if (0 == $options['scale']) {
 
-                        return $value;
+                        return round($value);
                     }
 
                     $values = explode(".", $value);
