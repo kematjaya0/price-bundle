@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of the kematjaya-currency-lib.
- */
-
 namespace Kematjaya\PriceBundle\Tests;
 
 use Kematjaya\PriceBundle\Converter\IndonesianConverter;
@@ -11,11 +7,6 @@ use Kematjaya\PriceBundle\Lib\IndonesianDateFormat;
 use Kematjaya\PriceBundle\Lib\AbstractDateFormat;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @package Kematjaya\Currency\Tests
- * @license https://opensource.org/licenses/MIT MIT
- * @author  Nur Hidayatullah <kematjaya0@gmail.com>
- */
 class IndonesianDateFormatTest extends TestCase
 {
     public function testInstance(): AbstractDateFormat

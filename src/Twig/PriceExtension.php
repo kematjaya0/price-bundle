@@ -12,11 +12,7 @@ use Twig\Extension\AbstractExtension;
 class PriceExtension extends AbstractExtension 
 {
     
-    /**
-     * 
-     * @var CurrencyFormatInterface
-     */
-    private $currencyFormat;
+    private CurrencyFormatInterface $currencyFormat;
 
     public function __construct(CurrencyFormatInterface $currencyFormat)
     {

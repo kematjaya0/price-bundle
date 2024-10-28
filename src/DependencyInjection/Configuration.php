@@ -1,20 +1,11 @@
 <?php
 
-/**
- * This file is part of the kematjaya/price-bundle.
- */
-
 namespace Kematjaya\PriceBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 
-/**
- * @package Kematjaya\Currency\DependencyInjection
- * @license https://opensource.org/licenses/MIT MIT
- * @author  Nur Hidayatullah <kematjaya0@gmail.com>
- */
 class Configuration implements ConfigurationInterface
 {
 

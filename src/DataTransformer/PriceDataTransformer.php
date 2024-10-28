@@ -25,7 +25,7 @@ class PriceDataTransformer implements DataTransformerInterface
      * @param mixed $value
      * @return mixed
      */
-    public function reverseTransform($value) 
+    public function reverseTransform(mixed $value) :mixed
     {   
         return ($value) ? $this->currencyFormat->priceToFloat($value):0;
     }
@@ -35,7 +35,7 @@ class PriceDataTransformer implements DataTransformerInterface
      * @param mixed $value
      * @return mixed
      */
-    public function transform($value) 
+    public function transform(mixed $value) :mixed
     {
         return ($value) ? $this->currencyFormat->priceToFloat($value) : 0;
     }

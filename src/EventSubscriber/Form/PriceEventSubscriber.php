@@ -7,9 +7,6 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-/**
- * @author Nur Hidayatullah <kematjaya0@gmail.com>
- */
 class PriceEventSubscriber implements EventSubscriberInterface
 {
     /**

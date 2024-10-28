@@ -6,9 +6,6 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\Intl\Currencies;
 use Kematjaya\PriceBundle\Lib\CurrencyFormatInterface;
 
-/**
- * @author Nur Hidayatullah <kematjaya0@gmail.com>
- */
 class CurrencyFormat implements CurrencyFormatInterface
 {
     /**

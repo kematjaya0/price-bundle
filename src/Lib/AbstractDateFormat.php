@@ -1,19 +1,10 @@
 <?php
 
-/**
- * This file is part of the kematjaya/price-bundle.
- */
-
 namespace Kematjaya\PriceBundle\Lib;
 
 use Kematjaya\PriceBundle\Converter\ConverterInterface;
 use DateTimeInterface;
 
-/**
- * @package Kematjaya\Currency\Lib
- * @license https://opensource.org/licenses/MIT MIT
- * @author  Nur Hidayatullah <kematjaya0@gmail.com>
- */
 abstract class AbstractDateFormat implements DateFormatInterface
 {
     

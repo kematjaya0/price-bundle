@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class PriceExtensionTest extends WebTestCase
 {
-    public static function getKernelClass() 
+    public static function getKernelClass() :string
     {
         return AppKernelTest::class;
     }

@@ -27,7 +27,7 @@ class PriceType extends MoneyType
         $this->currencyFormat = $currencyFormat;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver):void
     {
         parent::configureOptions($resolver);
 
@@ -42,7 +42,7 @@ class PriceType extends MoneyType
         ]);
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options):void
     {
         $builder->addModelTransformer(
             new CallbackTransformer(
@@ -73,7 +73,7 @@ class PriceType extends MoneyType
         );
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options):void
     {
         parent::buildView($view, $form, $options);
 
