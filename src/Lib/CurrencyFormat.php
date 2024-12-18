@@ -92,10 +92,10 @@ class CurrencyFormat implements CurrencyFormatInterface
     
     public function priceToFloat(string $price = '0', string $currency = null):float
     {
-        $currency = null !== $currency ? $currency : $this->getCurrencySymbol();
+        $currency = null !== $currency ? $currency : $this->currency;
         $this->isValid($currency);
-
-        $numbers = explode($this->getCentPoint(), str_replace($currency, '', $price));
+        $symbol = Currencies::getSymbol($currency);
+        $numbers = explode($this->getCentPoint(), str_replace($symbol, '', $price));
         $numbers[0] = str_replace($this->getThousandPoint(), '', trim($numbers[0]));
         
         return round((float) implode(".", $numbers), $this->getCentLimit());
@@ -103,10 +103,10 @@ class CurrencyFormat implements CurrencyFormatInterface
     
     public function formatPrice(float $number = 0, int $centLimit = null, string $centPoint = null, string $thousandPoint = null, string $currency = null):string
     {
-        $currencyCode = null !== $currency ? $currency : $this->getCurrencySymbol();
+        $currencyCode = null !== $currency ? $currency : $this->currency;
         $this->isValid($currencyCode);
-
-        return sprintf("%s %s", $currencyCode,  number_format($number, null !== $centLimit ? $centLimit : $this->getCentLimit(), null !== $centPoint ? $centPoint : $this->getCentPoint(), null !== $thousandPoint ? $thousandPoint : $this->getThousandPoint()));
+        $symbol = Currencies::getSymbol($currencyCode);
+        return sprintf("%s %s", $symbol,  number_format($number, null !== $centLimit ? $centLimit : $this->getCentLimit(), null !== $centPoint ? $centPoint : $this->getCentPoint(), null !== $thousandPoint ? $thousandPoint : $this->getThousandPoint()));
     }
     
     protected function isValid(string $currency):bool
