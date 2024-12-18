@@ -17,14 +17,14 @@ interface CurrencyFormatInterface
      * @param string $price
      * @return float
      */
-    public function priceToFloat(string $price = '0'):float;
+    public function priceToFloat(string $price = '0', string $currency = null):float;
     
     /**
      * Encode / formatting floating number to price format
      * @param float $number
      * @return string
      */
-    public function formatPrice(float $number = 0, int $centLimit = null, string $centPoint = null, string $thousandPoint = null):string;
+    public function formatPrice(float $number = 0, int $centLimit = null, string $centPoint = null, string $thousandPoint = null, string $currency = null):string;
     
     public function getCurrencySymbol():?string;
     
