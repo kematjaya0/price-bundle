@@ -3,7 +3,7 @@
     {%- set prepend = not (money_pattern starts with '{{') -%}
     {%- if prepend -%}
         <div class="input-group {{ group_class|default('') }}">
-            <span class="input-group-text">{{ money_pattern|form_encode_currency }}</span>
+            <span class="input-group-text currency-code">{{ money_pattern|form_encode_currency }}</span>
             {{- block('form_widget_simple') -}}
         </div>
     {%- else -%}
