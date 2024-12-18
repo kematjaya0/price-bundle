@@ -90,18 +90,22 @@ class CurrencyFormat implements CurrencyFormatInterface
         return $this;
     }
     
-    public function priceToFloat(string $price = '0'):float
+    public function priceToFloat(string $price = '0', string $currency = null):float
     {
-        $numbers = explode($this->getCentPoint(), str_replace($this->getCurrencySymbol(), '', $price));
+        $currency = null !== $currency ? $currency : $this->getCurrencySymbol();
+        $this->isValid($currency);
+
+        $numbers = explode($this->getCentPoint(), str_replace($currency, '', $price));
         $numbers[0] = str_replace($this->getThousandPoint(), '', trim($numbers[0]));
         
         return round((float) implode(".", $numbers), $this->getCentLimit());
     }
     
-    public function formatPrice(float $number = 0, int $centLimit = null, string $centPoint = null, string $thousandPoint = null):string
+    public function formatPrice(float $number = 0, int $centLimit = null, string $centPoint = null, string $thousandPoint = null, string $currency = null):string
     {
-        $currencyCode = $this->getCurrencySymbol();
-        
+        $currencyCode = null !== $currency ? $currency : $this->getCurrencySymbol();
+        $this->isValid($currencyCode);
+
         return sprintf("%s %s", $currencyCode,  number_format($number, null !== $centLimit ? $centLimit : $this->getCentLimit(), null !== $centPoint ? $centPoint : $this->getCentPoint(), null !== $thousandPoint ? $thousandPoint : $this->getThousandPoint()));
     }
     

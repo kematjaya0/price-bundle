@@ -77,8 +77,8 @@ class PriceType extends MoneyType
     {
         parent::buildView($view, $form, $options);
 
-        if (false === strpos($view->vars['money_pattern'], $this->currencyFormat->getCurrencySymbol())) {
-            $view->vars['money_pattern'] = sprintf("%s %s", $this->currencyFormat->getCurrencySymbol(), $view->vars['money_pattern']);
+        if (false === strpos($view->vars['money_pattern'], $options["currency"])) {
+            $view->vars['money_pattern'] = sprintf("%s %s", $options["currency"], $view->vars['money_pattern']);
         }
 
         $view->vars["attr"] = !empty($view->vars['attr']) ? $view->vars['attr'] : ["style" => 'text-align: right'];
