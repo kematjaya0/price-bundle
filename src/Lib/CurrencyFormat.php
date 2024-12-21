@@ -96,8 +96,12 @@ class CurrencyFormat implements CurrencyFormatInterface
     public function priceToFloat(string $price = '0', string $currency = null):float
     {
         $currency = null !== $currency ? $currency : $this->currency;
-        $this->isValid($currency);
-        $symbol = Currencies::getSymbol($currency);
+        try {
+            $this->isValid($currency);
+            $symbol = Currencies::getSymbol($currency);
+        } catch (\Exception $e) {
+            $symbol = $currency;
+        }
         $numbers = explode($this->getCentPoint(), str_replace($symbol, '', $price));
         $numbers[0] = str_replace($this->getThousandPoint(), '', trim($numbers[0]));
         
