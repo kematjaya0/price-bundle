@@ -27,7 +27,7 @@ class PriceType extends MoneyType
         $this->currencyFormat = $currencyFormat;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver):void
     {
         parent::configureOptions($resolver);
 
@@ -67,7 +67,7 @@ class PriceType extends MoneyType
                     return 0;
                 }
 
-                return $this->currencyFormat->priceToFloat($value, $options['currency']);
+                return $this->currencyFormat->priceToFloat($value, $options['currency'], $options["scale"]);
             }
             )
         );
