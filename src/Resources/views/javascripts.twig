@@ -8,7 +8,7 @@
             centsSeparator: '{{ cent_point() }}',
             thousandsSeparator: '{{ thousand_point() }}',
             centsLimit: parseInt('{{ cent_limit() }}'),
-            allowNegative: {{ allow_negative ? "true":"false" }}
+            allowNegative: {{ allow_negative() ? "true":"false" }}
         });
     }
 

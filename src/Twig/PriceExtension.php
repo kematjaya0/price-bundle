@@ -3,6 +3,7 @@
 namespace Kematjaya\PriceBundle\Twig;
 
 use Kematjaya\PriceBundle\Lib\CurrencyFormatInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Twig\Environment;
 use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
@@ -15,9 +16,11 @@ class PriceExtension extends AbstractExtension
 
     private CurrencyFormatInterface $currencyFormat;
     private Environment $twig;
+    private array $configs;
 
-    public function __construct(CurrencyFormatInterface $currencyFormat, Environment $twig)
+    public function __construct(CurrencyFormatInterface $currencyFormat, ParameterBagInterface $bag, Environment $twig)
     {
+        $this->configs = $bag->get("price")["currency"];
         $this->currencyFormat = $currencyFormat;
         $this->twig = $twig;
     }
@@ -41,6 +44,9 @@ class PriceExtension extends AbstractExtension
             }),
             new TwigFunction('cent_limit', function () {
                 return $this->currencyFormat->getCentLimit();
+            }),
+            new TwigFunction('allow_negative', function () {
+                return $this->configs["allow_negative"];
             })
         );
     }
