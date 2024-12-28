@@ -32,6 +32,7 @@ class PriceType extends MoneyType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
+            "auto_cent_format" => true,
             'invalid_message' => 'The selected issue does not exist',
             'currency' => $this->currencyFormat->getCurrencySymbol(),
             'prefix' => $this->currencyFormat->getCurrencySymbol(),
@@ -84,6 +85,7 @@ class PriceType extends MoneyType
         $view->vars["attr"] = !empty($view->vars['attr']) ? $view->vars['attr'] : ["style" => 'text-align: right'];
         $view->vars['prefix'] = "";
         $view->vars['suffix'] = "";
+        $view->vars["auto_cent_format"] = $options["auto_cent_format"];
         $view->vars['allow_negative'] = $this->configs["allow_negative"];
         $view->vars['cents_separator'] = $options['cents-separator'];
         $view->vars['thousands_separator'] = $options['thousands-separator'];
