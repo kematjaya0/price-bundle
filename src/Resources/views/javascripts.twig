@@ -31,6 +31,10 @@
         }
 
         values[1] = centValue;
+        if ("" === centValue) {
+            values = [values[0]];
+        }
+
         let val = values.join("{{ cent_point() }}");
         $(dom).val(val);
     };
