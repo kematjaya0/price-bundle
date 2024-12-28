@@ -67,7 +67,7 @@ class PriceType extends MoneyType
                     return 0;
                 }
 
-                return $this->currencyFormat->priceToFloat($value, $options['currency']);
+                return $this->currencyFormat->priceToFloat($value, $options['currency'], $options["scale"]);
             }
             )
         );

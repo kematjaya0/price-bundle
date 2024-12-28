@@ -1,0 +1,29 @@
+<script src="{{ asset('bundles/price/js/jquery-price-format/jquery.priceformat.min.js')}}"></script>
+<script>
+    function refreshPriceDOM(dom)
+    {
+        $(dom).priceFormat({
+            prefix: '',
+            suffix: '',
+            centsSeparator: '{{ cent_point() }}',
+            thousandsSeparator: '{{ thousand_point() }}',
+            centsLimit: parseInt('{{ cent_limit() }}')
+        });
+    }
+
+    function getFloatValue(string) {
+        if (undefined == string) {
+            return 0;
+        }
+
+        var arr = ["Rp", "Rp.", "Rp. ", "{{ thousand_point() }}"];
+        for (i = 0; i < arr.length;i++) {
+            while (string.includes(arr[i])) {
+                string = string.replace(arr[i],'');
+            }
+        }
+        string = string.replace('{{ cent_point() }}','.');
+
+        return parseFloat(string);
+    }
+</script>

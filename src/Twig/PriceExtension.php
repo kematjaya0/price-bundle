@@ -3,25 +3,31 @@
 namespace Kematjaya\PriceBundle\Twig;
 
 use Kematjaya\PriceBundle\Lib\CurrencyFormatInterface;
+use Twig\Environment;
 use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
 
 /**
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
  */
-class PriceExtension extends AbstractExtension 
+class PriceExtension extends AbstractExtension
 {
-    
-    private CurrencyFormatInterface $currencyFormat;
 
-    public function __construct(CurrencyFormatInterface $currencyFormat)
+    private CurrencyFormatInterface $currencyFormat;
+    private Environment $twig;
+
+    public function __construct(CurrencyFormatInterface $currencyFormat, Environment $twig)
     {
         $this->currencyFormat = $currencyFormat;
+        $this->twig = $twig;
     }
-    
+
     public function getFunctions():array
     {
         return array(
+            new TwigFunction("render_price_javascript", function () {
+                return $this->twig->render("@Price/javascripts.twig");
+            }, array('is_safe' => array('html'))),
             new TwigFunction('currency', array($this, 'currency'), array('is_safe' => array('html'))),
             new TwigFunction('price', array($this, 'price'), array('is_safe' => array('html'))),
             new TwigFunction('price_symbol', function () {
@@ -53,7 +59,7 @@ class PriceExtension extends AbstractExtension
         if (!is_numeric($number)) {
             $number = 0;
         }
-        
+
         return $this->currencyFormat->formatPrice($number, $centLimit, $centPoint, $thousandPoint, $currency);
     }
 }
