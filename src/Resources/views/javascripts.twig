@@ -3,11 +3,12 @@
     function refreshPriceDOM(dom)
     {
         $(dom).priceFormat({
-            prefix: '',
-            suffix: '',
+            prefix: '{{ prefix }}',
+            suffix: '{{ suffix }}',
             centsSeparator: '{{ cent_point() }}',
             thousandsSeparator: '{{ thousand_point() }}',
-            centsLimit: parseInt('{{ cent_limit() }}')
+            centsLimit: parseInt('{{ cent_limit() }}'),
+            allowNegative: {{ allow_negative ? "true":"false" }}
         });
     }
 
@@ -25,5 +26,22 @@
         string = string.replace('{{ cent_point() }}','.');
 
         return parseFloat(string);
+    }
+
+    function generateCentNumber(dom) {
+        let values = $(dom).val().split(".");
+        let centValue = "";
+        for (let i = 0; i < parseInt('{{ cent_limit() }}'); i++) {
+            if (typeof values[1] != "undefined") {
+                let chr = values[1].charAt(i);
+                centValue += chr.length > 0 ? chr : "0";
+                continue;
+            }
+
+            centValue += "0";
+        }
+
+        values[1] = centValue;
+        $(dom).val(values.join("."));
     }
 </script>
