@@ -3,8 +3,8 @@
     function refreshPriceDOM(dom)
     {
         $(dom).priceFormat({
-            prefix: '{{ prefix }}',
-            suffix: '{{ suffix }}',
+            prefix: '',
+            suffix: '',
             centsSeparator: '{{ cent_point() }}',
             thousandsSeparator: '{{ thousand_point() }}',
             centsLimit: parseInt('{{ cent_limit() }}'),
