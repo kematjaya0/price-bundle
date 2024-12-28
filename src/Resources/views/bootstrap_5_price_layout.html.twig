@@ -50,7 +50,9 @@
                 return;
             }
 
+            {% if auto_cent_format %}
             generateCentNumber{{ id|capitalize }}();
+            {% endif %}
             format{{ id|capitalize }}();
         }
 
