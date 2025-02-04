@@ -29,8 +29,8 @@ class ConverterExtension extends AbstractExtension
         ];
     }
     
-    public function getTerbilang($number, bool $includeCurrency = false):string
+    public function getTerbilang($number, bool $includeCurrency = false, string $currency = null):string
     {
-        return $this->converter->convert($number, $includeCurrency);
+        return $this->converter->convert($number, $currency);
     }
 }
