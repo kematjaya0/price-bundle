@@ -1,6 +1,6 @@
 <script src="{{ asset('bundles/price/js/jquery-price-format/jquery.priceformat.min.js')}}"></script>
 <script>
-    var getFloatValue = function (string) {
+    function getFloatValue (string) {
         if (undefined == string) {
             return 0;
         }
@@ -14,9 +14,9 @@
         string = string.replace('{{ cent_point() }}','.');
 
         return parseFloat(string);
-    };
+    }
 
-    var generateCentNumber = function (dom, centLimit) {
+    function generateCentNumber(dom, centLimit) {
         let limit = undefined !== centLimit ? centLimit : parseInt('{{ cent_limit() }}');
         let values = $(dom).val().split("{{ cent_point() }}");
         let centValue = "";
@@ -37,7 +37,7 @@
 
         let val = values.join("{{ cent_point() }}");
         $(dom).val(val);
-    };
+    }
 
     function refreshPriceDOM(dom) {
         $(dom).priceFormat({
@@ -49,4 +49,8 @@
             allowNegative: {{ allow_negative() ? "true":"false" }}
         });
     }
+
+    window.getFloatValue = getFloatValue;
+    window.generateCentNumber = generateCentNumber;
+    window.refreshPriceDOM = refreshPriceDOM;
 </script>
