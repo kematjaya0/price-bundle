@@ -7,5 +7,5 @@ namespace Kematjaya\PriceBundle\Converter;
  */
 interface ConverterInterface
 {
-    public function convert(float $number, string $currency = null):string;
+    public function convert(float $number, ?string $currency = null): string;
 }

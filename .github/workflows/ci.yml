@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: [8.1, 8.2, 8.3, 8.4]
+        symfony: [7.0.*, 7.1.*, 7.2.*]
+        exclude:
+          - php: 8.4
+            symfony: 7.0.*
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2, phpstan, php-cs-fixer
+          coverage: none
+
+      - name: Install dependencies
+        run: |
+          composer require "symfony/http-kernel:${{ matrix.symfony }}" --no-interaction --no-progress
+
+      - name: PHP CS Fixer (dry-run)
+        run: php-cs-fixer fix --dry-run --diff
+
+      - name: PHPStan
+        run: phpstan analyse --no-progress
+
+      - name: PHPUnit
+        run: vendor/bin/phpunit

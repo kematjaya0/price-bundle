@@ -8,30 +8,26 @@
 namespace Kematjaya\PriceBundle\Tests\Type;
 
 /**
- * Description of TestFormModel
+ * Description of TestFormModel.
  *
  * @author guest
  */
-class TestFormModel 
+class TestFormModel
 {
     /**
-     * 
      * @var float
      */
     private $nilai;
-    
-    public function getNilai(): ?float 
+
+    public function getNilai(): ?float
     {
         return $this->nilai;
     }
 
-    public function setNilai(float $nilai): self 
+    public function setNilai(float $nilai): self
     {
         $this->nilai = $nilai;
-        
+
         return $this;
     }
-
-
-    
 }

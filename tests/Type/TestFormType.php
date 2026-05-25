@@ -8,17 +8,17 @@
 namespace Kematjaya\PriceBundle\Tests\Type;
 
 use Kematjaya\PriceBundle\Type\PriceType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Description of TestFormType
+ * Description of TestFormType.
  *
  * @author guest
  */
-class TestFormType extends AbstractType 
+class TestFormType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options) 
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('nilai', PriceType::class);
     }

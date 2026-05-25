@@ -8,15 +8,14 @@ use Twig\TwigFilter;
 
 class DateFormatExtension extends AbstractExtension
 {
-    
     private AbstractDateFormat $dateFormat;
-    
-    public function __construct(AbstractDateFormat $dateFormat) 
+
+    public function __construct(AbstractDateFormat $dateFormat)
     {
         $this->dateFormat = $dateFormat;
     }
-    
-    public function getFilters():array
+
+    public function getFilters(): array
     {
         return [
             new TwigFilter('date_format', [$this->dateFormat, 'format']),

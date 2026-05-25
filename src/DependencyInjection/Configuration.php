@@ -2,13 +2,12 @@
 
 namespace Kematjaya\PriceBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('price');
@@ -19,7 +18,7 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-    protected function addCurrencyConfiguration(NodeBuilder $node):void
+    protected function addCurrencyConfiguration(NodeBuilder $node): void
     {
         $node
             ->arrayNode('currency')
@@ -29,7 +28,7 @@ class Configuration implements ConfigurationInterface
             ->integerNode('cent_limit')->defaultValue(0)->end()
             ->scalarNode('cent_point')->defaultValue('.')->end()
             ->scalarNode('thousand_point')->defaultValue(',')->end()
-            ->booleanNode("allow_negative")->defaultValue(true)->end()
+            ->booleanNode('allow_negative')->defaultValue(true)->end()
             ->end()
             ->end()
             ->end();
