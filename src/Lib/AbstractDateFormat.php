@@ -4,10 +4,12 @@
  * This file is part of the kematjaya/price-bundle.
  */
 
+declare(strict_types=1);
+
 namespace Kematjaya\PriceBundle\Lib;
 
-use Kematjaya\PriceBundle\Converter\ConverterInterface;
 use DateTimeInterface;
+use Kematjaya\PriceBundle\Converter\ConverterInterface;
 
 /**
  * @package Kematjaya\Currency\Lib
@@ -16,42 +18,42 @@ use DateTimeInterface;
  */
 abstract class AbstractDateFormat implements DateFormatInterface
 {
-    
     /**
-     * 
      * @var ConverterInterface
      */
     protected $converter;
-    
-    function __construct(ConverterInterface $converter) 
+
+    public function __construct(ConverterInterface $converter)
     {
         $this->converter = $converter;
     }
-    
-    abstract public function getDayName(string $day):string;
-    
-    abstract public function getMonthName(string $month):string;
-    
-    abstract public function reverse(string $date, string $splitTime = ','):?\DateTimeInterface;
-    
-    public function format(DateTimeInterface $date, $format = 'd M Y')
+
+    abstract public function getDayName(string $day): string;
+
+    abstract public function getMonthName(string $month): string;
+
+    abstract public function reverse(string $date, string $splitTime = ','): ?DateTimeInterface;
+
+    abstract public function getLabels(): array;
+
+    public function format(DateTimeInterface $date, string $format = 'd M Y'): string
     {
         $prefix = $this->getPrefix($format);
-        if (is_null($prefix)) {
-            
+        if (null === $prefix) {
             return $date->format($format);
         }
-        
-        $result = $this->doFormat($date, $format, $prefix);
-        
-        return implode($prefix, $result);
+
+        return implode($prefix, $this->doFormat($date, $format, $prefix));
     }
-    
-    protected function doFormat(DateTimeInterface $date, string $format, string $prefix):array
+
+    /**
+     * Splits $format on its separator, translates the "D" (day name) and "M"
+     * (month name) tokens, and formats every other token as-is.
+     */
+    protected function doFormat(DateTimeInterface $date, string $format, string $prefix): array
     {
-        $formatArr = explode($prefix, $format);
         $result = [];
-        foreach ($formatArr as $value) {
+        foreach (explode($prefix, $format) as $value) {
             switch ($value) {
                 case 'D':
                     $result[$value] = $this->getDayName($date->format('D'));
@@ -64,60 +66,46 @@ abstract class AbstractDateFormat implements DateFormatInterface
                     break;
             }
         }
-        
+
         return $result;
     }
-    
-    abstract public function getLabels():array;
-    
-    /**
-     * Convert to String
-     * @param DateTimeInterface $date
-     * @param string $format
-     * @return type
-     */
-    public function convertToString(DateTimeInterface $date, string $format = 'd M Y')
+
+    public function convertToString(DateTimeInterface $date, string $format = 'd M Y'): string
     {
         $prefix = $this->getPrefix($format);
-        if (is_null($prefix)) {
-            
+        if (null === $prefix) {
             return $date->format($format);
         }
-        
+
         $labels = $this->getLabels();
         $formats = $this->doFormat($date, $format, $prefix);
-        foreach ($formats as $k => $v) {
-            if (!is_numeric($v)) {
-                continue;
+        foreach ($formats as $key => $value) {
+            if (is_numeric($value)) {
+                $formats[$key] = $this->converter->convert((float) $value);
             }
-            
-            $formats[$k] = $this->converter->convert((int) $v);
         }
-        
-        foreach ($formats as $k => $v) {
-            $keteranganWaktu = (isset($labels[$k])) ? $labels[$k] : '';
-            $formats[$k] = sprintf("%s %s", trim($keteranganWaktu), trim($v));
+
+        foreach ($formats as $key => $value) {
+            $label = $labels[$key] ?? '';
+            $formats[$key] = sprintf('%s %s', trim($label), trim($value));
         }
-        
+
         return implode($prefix, $formats);
     }
-    
-    protected function getPrefix(string $format):?string
+
+    protected function getPrefix(string $format): ?string
     {
-        $prefix = $this->prefix();
-        $prev = null;
-        foreach ($prefix as $v) {
-            if (false === strpos($format, $v)) {
-                continue;
+        $matched = null;
+        foreach ($this->prefix() as $candidate) {
+            if (false !== strpos($format, $candidate)) {
+                $matched = $candidate;
             }
-            
-            $prev = $v;
         }
-        
-        return $prev;
+
+        return $matched;
     }
-    
-    protected function prefix()
+
+    protected function prefix(): array
     {
         return ['/', '-', ' '];
     }

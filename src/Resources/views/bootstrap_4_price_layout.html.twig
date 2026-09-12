@@ -67,11 +67,11 @@
         }
 
         function format{{ id|capitalize }}() {
-            refreshPriceDOM('#{{ id }}');
+            refreshPriceDOM('#{{ id }}', {{ scale }});
         }
 
         function generateCentNumber{{ id|capitalize }}() {
-            generateCentNumber('#{{ id }}');
+            generateCentNumber('#{{ id }}', {{ scale }});
         }
 
     </script>

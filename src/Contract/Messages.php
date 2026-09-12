@@ -1,13 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kematjaya\PriceBundle\Contract;
+
 /**
  * @author Nur Hidayatullah <kematjaya0@gmail.com>
  */
-class Messages 
+class Messages
 {
-    public static function triggerDeprecation(string $package, string $version, string $message, ...$args):void
+    public static function triggerDeprecation(string $package, string $version, string $message, ...$args): void
     {
-        trigger_error(($package || $version ? "Since $package $version: " : '').($args ? vsprintf($message, $args) : $message), \E_USER_DEPRECATED);
+        $prefix = ('' !== $package || '' !== $version) ? sprintf('Since %s %s: ', $package, $version) : '';
+        $formattedMessage = $args ? vsprintf($message, $args) : $message;
+
+        trigger_error($prefix . $formattedMessage, \E_USER_DEPRECATED);
     }
 }
