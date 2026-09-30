@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kematjaya\PriceBundle\EventSubscriber\Form;
 
 use Kematjaya\PriceBundle\Lib\CurrencyFormatInterface;
@@ -15,7 +17,7 @@ class PriceEventSubscriber implements EventSubscriberInterface
     private $currencyFormat;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $name;
 
@@ -41,9 +43,11 @@ class PriceEventSubscriber implements EventSubscriberInterface
     public function preSubmit(FormEvent $event): void
     {
         $data = $event->getData();
-        if ($this->name and isset($data[$this->name])) {
-            $data[$this->name] = $data[$this->name] ? (float) $this->currencyFormat->priceToFloat($data[$this->name]) : 0;
-            $event->setData($data);
+        if (null === $this->name || !isset($data[$this->name])) {
+            return;
         }
+
+        $data[$this->name] = $data[$this->name] ? $this->currencyFormat->priceToFloat($data[$this->name]) : 0;
+        $event->setData($data);
     }
 }

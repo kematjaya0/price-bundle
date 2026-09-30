@@ -39,13 +39,14 @@
         $(dom).val(val);
     }
 
-    function refreshPriceDOM(dom) {
+    function refreshPriceDOM(dom, centLimit) {
+        let limit = undefined !== centLimit ? centLimit : parseInt('{{ cent_limit() }}');
         $(dom).priceFormat({
             prefix: '',
             suffix: '',
             centsSeparator: '{{ cent_point() }}',
             thousandsSeparator: '{{ thousand_point() }}',
-            centsLimit: parseInt('{{ cent_limit() }}'),
+            centsLimit: limit,
             allowNegative: {{ allow_negative() ? "true":"false" }}
         });
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kematjaya\PriceBundle\Tests;
 
 use Kematjaya\PriceBundle\PriceBundle;
@@ -23,9 +25,9 @@ class AppTestKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $loader->load(function (ContainerBuilder $container) use ($loader) {
-            $loader->load(__DIR__.DIRECTORY_SEPARATOR.'config/config.yml');
-            $loader->load(__DIR__.DIRECTORY_SEPARATOR.'config/services_test.yml');
+        $loader->load(function (ContainerBuilder $container) use ($loader): void {
+            $loader->load(__DIR__ . DIRECTORY_SEPARATOR . 'config/config.yml');
+            $loader->load(__DIR__ . DIRECTORY_SEPARATOR . 'config/services_test.yml');
 
             $container->addObjectResource($this);
         });

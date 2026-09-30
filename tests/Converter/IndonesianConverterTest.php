@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kematjaya\PriceBundle\Tests\Converter;
 
 use Kematjaya\PriceBundle\Converter\IndonesianConverter;
@@ -8,115 +10,84 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class IndonesianConverterTest extends TestCase
 {
-    private function createTranslator(): TranslatorInterface
+    /**
+     * @dataProvider provideNumbers
+     */
+    public function testConvertWithoutCurrency(float $number, string $expected): void
+    {
+        $converter = new IndonesianConverter();
+
+        $this->assertSame($expected, $converter->convert($number));
+    }
+
+    public static function provideNumbers(): array
+    {
+        return [
+            'zero' => [0, 'Nol'],
+            'single digit' => [5, 'Lima'],
+            'ten' => [10, 'Sepuluh'],
+            'eleven' => [11, 'Sebelas'],
+            'twelve (belas)' => [12, 'Dua Belas'],
+            'nineteen (belas)' => [19, 'Sembilan Belas'],
+            'twenty (puluh)' => [20, 'Dua Puluh'],
+            'forty five (puluh)' => [45, 'Empat Puluh Lima'],
+            'ninety nine (puluh)' => [99, 'Sembilan Puluh Sembilan'],
+            'one hundred (seratus)' => [100, 'Seratus'],
+            'one hundred fifty (seratus)' => [150, 'Seratus Lima Puluh'],
+            'two hundred (ratus)' => [200, 'Dua Ratus'],
+            'nine hundred ninety nine (ratus)' => [999, 'Sembilan Ratus Sembilan Puluh Sembilan'],
+            'one thousand (seribu)' => [1000, 'Seribu'],
+            'one thousand five hundred (seribu)' => [1500, 'Seribu Lima Ratus'],
+            'two thousand (ribu)' => [2000, 'Dua Ribu'],
+            'ten thousand (ribu)' => [10000, 'Sepuluh Ribu'],
+            'one million (juta)' => [1000000, 'Satu Juta'],
+            'one billion (milyar)' => [1000000000, 'Satu Milyar'],
+            'one trillion (trilyun)' => [1000000000000, 'Satu Trilyun'],
+            'largest supported number' => [
+                99999999999999,
+                'Sembilan Puluh Sembilan Trilyun Sembilan Ratus Sembilan Puluh Sembilan Milyar '
+                . 'Sembilan Ratus Sembilan Puluh Sembilan Juta Sembilan Ratus Sembilan Puluh Sembilan Ribu '
+                . 'Sembilan Ratus Sembilan Puluh Sembilan',
+            ],
+            'negative' => [-100, 'Minus Seratus'],
+            'decimal (koma)' => [100.25, 'Seratus Koma Dua Puluh Lima'],
+        ];
+    }
+
+    public function testConvertThrowsWhenNumberExceedsSupportedRange(): void
+    {
+        $converter = new IndonesianConverter();
+
+        $this->expectException(\OverflowException::class);
+        $this->expectExceptionMessage('angka melebihi batas');
+
+        $converter->convert(100000000000000);
+    }
+
+    public function testConvertWithCurrencyButNoTranslatorUsesRawCurrencyCode(): void
+    {
+        $converter = new IndonesianConverter();
+
+        $this->assertSame('Seratus IDR', $converter->convert(100, 'IDR'));
+    }
+
+    public function testConvertWithCurrencyAndTranslatorUsesTranslatedLabel(): void
     {
         $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')->willReturnArgument(0);
+        $translator->expects($this->once())
+            ->method('trans')
+            ->with('IDR')
+            ->willReturn('Rupiah');
 
-        return $translator;
+        $converter = new IndonesianConverter($translator);
+
+        $this->assertSame('Seratus Rupiah', $converter->convert(100, 'IDR'));
     }
 
-    public function testConvertBasicNumbers(): void
+    public function testConvertNegativeWithCurrencyAppendsCurrencyOnlyOnce(): void
     {
-        $converter = new IndonesianConverter($this->createTranslator());
+        $converter = new IndonesianConverter();
 
-        $this->assertEquals('Nol', $converter->convert(0));
-        $this->assertEquals('Satu', $converter->convert(1));
-        $this->assertEquals('Dua', $converter->convert(2));
-        $this->assertEquals('Sepuluh', $converter->convert(10));
-        $this->assertEquals('Sebelas', $converter->convert(11));
-        $this->assertEquals('Dua Belas', $converter->convert(12));
-        $this->assertEquals('Dua Puluh', $converter->convert(20));
-        $this->assertEquals('Dua Puluh Satu', $converter->convert(21));
-    }
-
-    public function testConvertHundreds(): void
-    {
-        $converter = new IndonesianConverter($this->createTranslator());
-
-        $this->assertEquals('Seratus', $converter->convert(100));
-        $this->assertEquals('Seratus Satu', $converter->convert(101));
-        $this->assertEquals('Seratus Sepuluh', $converter->convert(110));
-        $this->assertEquals('Dua Ratus', $converter->convert(200));
-        $this->assertEquals('Sembilan Ratus Sembilan Puluh Sembilan', $converter->convert(999));
-    }
-
-    public function testConvertThousands(): void
-    {
-        $converter = new IndonesianConverter($this->createTranslator());
-
-        $this->assertEquals('Seribu', $converter->convert(1000));
-        $this->assertEquals('Seribu Seratus', $converter->convert(1100));
-        $this->assertEquals('Dua Ribu', $converter->convert(2000));
-        $this->assertEquals('Sepuluh Ribu', $converter->convert(10000));
-        $this->assertEquals('Seratus Ribu', $converter->convert(100000));
-    }
-
-    public function testConvertMillions(): void
-    {
-        $converter = new IndonesianConverter($this->createTranslator());
-
-        $this->assertEquals('Satu Juta', $converter->convert(1000000));
-        $this->assertEquals('Dua Juta', $converter->convert(2000000));
-        $this->assertEquals('Sepuluh Juta', $converter->convert(10000000));
-        $this->assertEquals('Seratus Juta', $converter->convert(100000000));
-    }
-
-    public function testConvertBillions(): void
-    {
-        $converter = new IndonesianConverter($this->createTranslator());
-
-        $this->assertEquals('Satu Milyar', $converter->convert(1000000000));
-        $this->assertEquals('Dua Milyar', $converter->convert(2000000000));
-        $this->assertEquals('Seratus Milyar', $converter->convert(100000000000));
-    }
-
-    public function testConvertTrillions(): void
-    {
-        $converter = new IndonesianConverter($this->createTranslator());
-
-        $this->assertEquals('Satu Trilyun', $converter->convert(1000000000000));
-        $this->assertEquals('Dua Trilyun', $converter->convert(2000000000000));
-    }
-
-    public function testConvertWithDecimal(): void
-    {
-        $converter = new IndonesianConverter($this->createTranslator());
-
-        $this->assertEquals('Seratus Koma Lima', $converter->convert(100.5));
-        $this->assertEquals('Seratus Koma Dua Puluh Lima', $converter->convert(100.25));
-    }
-
-    public function testConvertWithCurrency(): void
-    {
-        $converter = new IndonesianConverter($this->createTranslator());
-
-        $this->assertEquals('Seratus Rupiah', $converter->convert(100, 'Rupiah'));
-        $this->assertEquals('Seribu Dolar', $converter->convert(1000, 'Dolar'));
-    }
-
-    public function testConvertNegativeNumber(): void
-    {
-        $converter = new IndonesianConverter($this->createTranslator());
-
-        $result = $converter->convert(-100);
-        $this->assertStringContainsString('Minus', $result);
-        $this->assertStringContainsString('Seratus', $result);
-    }
-
-    public function testConvertNegativeWithCurrency(): void
-    {
-        $converter = new IndonesianConverter($this->createTranslator());
-
-        $result = $converter->convert(-5000, 'Rupiah');
-        $this->assertStringContainsString('Minus', $result);
-        $this->assertStringContainsString('Rupiah', $result);
-    }
-
-    public function testConvertZero(): void
-    {
-        $converter = new IndonesianConverter($this->createTranslator());
-
-        $this->assertEquals('Nol', $converter->convert(0));
+        $this->assertSame('Minus Seratus IDR', $converter->convert(-100, 'IDR'));
     }
 }

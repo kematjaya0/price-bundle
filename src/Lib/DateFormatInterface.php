@@ -4,6 +4,8 @@
  * This file is part of the kematjaya/price-bundle.
  */
 
+declare(strict_types=1);
+
 namespace Kematjaya\PriceBundle\Lib;
 
 /**

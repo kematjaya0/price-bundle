@@ -2,3 +2,5 @@ composer.lock
 /vendor
 /nbproject
 /var
+/.phpunit.result.cache
+/.phpunit.cache

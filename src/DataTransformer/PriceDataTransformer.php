@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kematjaya\PriceBundle\DataTransformer;
 
 use Kematjaya\PriceBundle\Lib\CurrencyFormatInterface;
@@ -20,13 +22,23 @@ class PriceDataTransformer implements DataTransformerInterface
         $this->currencyFormat = $currencyFormat;
     }
 
-    public function reverseTransform(mixed $value): mixed
+    /**
+     * Model (float) to view (formatted string).
+     *
+     * @param mixed $value
+     */
+    public function transform($value): ?string
     {
-        return ($value) ? $this->currencyFormat->priceToFloat($value) : 0;
+        return $value ? $this->currencyFormat->formatPrice((float) $value) : null;
     }
 
-    public function transform(mixed $value): mixed
+    /**
+     * View (formatted string) to model (float).
+     *
+     * @param mixed $value
+     */
+    public function reverseTransform($value): float
     {
-        return ($value) ? $this->currencyFormat->priceToFloat($value) : 0;
+        return $value ? $this->currencyFormat->priceToFloat((string) $value) : 0;
     }
 }

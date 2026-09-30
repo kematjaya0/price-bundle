@@ -1,59 +1,60 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kematjaya\PriceBundle\Tests\DataTransformer;
 
 use Kematjaya\PriceBundle\DataTransformer\PriceDataTransformer;
-use Kematjaya\PriceBundle\Lib\CurrencyFormat;
+use Kematjaya\PriceBundle\Lib\CurrencyFormatInterface;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 class PriceDataTransformerTest extends TestCase
 {
-    private function createCurrencyFormat(): CurrencyFormat
+    public function testTransformFormatsANonEmptyModelValue(): void
     {
-        $container = $this->createMock(ContainerBagInterface::class);
-        $container->method('get')->with('price')->willReturn([
-            'currency' => [
-                'code' => 'IDR', 'cent_limit' => 2, 'cent_point' => ',', 'thousand_point' => '.', 'allow_negative' => true,
-            ],
-        ]);
+        $currencyFormat = $this->createMock(CurrencyFormatInterface::class);
+        $currencyFormat->expects($this->once())
+            ->method('formatPrice')
+            ->with(1000.0)
+            ->willReturn('IDR 1,000');
 
-        return new CurrencyFormat($container);
+        $transformer = new PriceDataTransformer($currencyFormat);
+
+        $this->assertSame('IDR 1,000', $transformer->transform(1000.0));
     }
 
-    public function testReverseTransform(): void
+    public function testTransformReturnsNullForEmptyModelValue(): void
     {
-        $cf = $this->createCurrencyFormat();
-        $transformer = new PriceDataTransformer($cf);
+        $currencyFormat = $this->createMock(CurrencyFormatInterface::class);
+        $currencyFormat->expects($this->never())->method('formatPrice');
 
-        $result = $transformer->reverseTransform('IDR 10.000,50');
-        $this->assertEquals(10000.50, $result);
+        $transformer = new PriceDataTransformer($currencyFormat);
+
+        $this->assertNull($transformer->transform(null));
+        $this->assertNull($transformer->transform(0));
     }
 
-    public function testReverseTransformEmpty(): void
+    public function testReverseTransformParsesANonEmptyViewValue(): void
     {
-        $cf = $this->createCurrencyFormat();
-        $transformer = new PriceDataTransformer($cf);
+        $currencyFormat = $this->createMock(CurrencyFormatInterface::class);
+        $currencyFormat->expects($this->once())
+            ->method('priceToFloat')
+            ->with('IDR 1,000')
+            ->willReturn(1000.0);
 
-        $this->assertEquals(0, $transformer->reverseTransform(''));
-        $this->assertEquals(0, $transformer->reverseTransform(null));
+        $transformer = new PriceDataTransformer($currencyFormat);
+
+        $this->assertSame(1000.0, $transformer->reverseTransform('IDR 1,000'));
     }
 
-    public function testTransform(): void
+    public function testReverseTransformReturnsZeroForEmptyViewValue(): void
     {
-        $cf = $this->createCurrencyFormat();
-        $transformer = new PriceDataTransformer($cf);
+        $currencyFormat = $this->createMock(CurrencyFormatInterface::class);
+        $currencyFormat->expects($this->never())->method('priceToFloat');
 
-        $result = $transformer->transform(10000.50);
-        $this->assertEquals(100005.0, $result);
-    }
+        $transformer = new PriceDataTransformer($currencyFormat);
 
-    public function testTransformEmpty(): void
-    {
-        $cf = $this->createCurrencyFormat();
-        $transformer = new PriceDataTransformer($cf);
-
-        $this->assertEquals(0, $transformer->transform(''));
-        $this->assertEquals(0, $transformer->transform(null));
+        $this->assertSame(0.0, $transformer->reverseTransform(null));
+        $this->assertSame(0.0, $transformer->reverseTransform(''));
     }
 }
