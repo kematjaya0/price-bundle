@@ -14,26 +14,15 @@ use Twig\TwigFilter;
  */
 class ConverterExtension extends AbstractExtension
 {
-    /**
-     * @var ConverterInterface
-     */
-    private $converter;
-
-    /**
-     * @var CurrencyFormatInterface|null
-     */
-    private $currencyFormat;
-
-    public function __construct(ConverterInterface $converter, ?CurrencyFormatInterface $currencyFormat = null)
-    {
-        $this->converter = $converter;
-        $this->currencyFormat = $currencyFormat;
-    }
+    public function __construct(
+        private readonly ConverterInterface $converter,
+        private readonly ?CurrencyFormatInterface $currencyFormat = null,
+    ) {}
 
     public function getFilters(): array
     {
         return [
-            new TwigFilter('terbilang', [$this, 'getTerbilang']),
+            new TwigFilter('terbilang', $this->getTerbilang(...)),
         ];
     }
 

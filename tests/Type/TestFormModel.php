@@ -14,10 +14,7 @@ namespace Kematjaya\PriceBundle\Tests\Type;
  */
 class TestFormModel
 {
-    /**
-     * @var float
-     */
-    private $nilai;
+    private ?float $nilai = null;
 
     public function getNilai(): ?float
     {

@@ -9,30 +9,18 @@ use Symfony\Component\Intl\Currencies;
 
 class CurrencyFormat implements CurrencyFormatInterface
 {
-    /**
-     * @var int
-     */
-    private $centLimit;
+    private int $centLimit;
 
-    /**
-     * @var string
-     */
-    private $centPoint;
+    private readonly string $centPoint;
 
-    /**
-     * @var string
-     */
-    private $thousandPoint;
+    private readonly string $thousandPoint;
 
-    /**
-     * @var string
-     */
-    private $currency;
+    private string $currency;
 
     /**
      * @var array<string, int>
      */
-    private $centLimits;
+    private readonly array $centLimits;
 
     public function __construct(ContainerBagInterface $container)
     {
@@ -104,11 +92,11 @@ class CurrencyFormat implements CurrencyFormatInterface
         ?string $centPoint = null,
         ?string $thousandPoint = null
     ): float {
-        $currency = $currency ?? $this->currency;
+        $currency ??= $this->currency;
         try {
             $this->isValid($currency);
             $symbol = Currencies::getSymbol($currency);
-        } catch (\InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException) {
             $symbol = $currency;
         }
 

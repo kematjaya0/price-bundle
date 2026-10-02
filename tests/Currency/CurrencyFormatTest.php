@@ -7,6 +7,7 @@ namespace Kematjaya\PriceBundle\Tests\Currency;
 use Kematjaya\PriceBundle\Converter\ConverterInterface;
 use Kematjaya\PriceBundle\Lib\CurrencyFormatInterface;
 use Kematjaya\PriceBundle\Tests\AppTestKernel;
+use PHPUnit\Framework\Attributes\Depends;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -35,9 +36,7 @@ class CurrencyFormatTest extends WebTestCase
         return $container->get(CurrencyFormatInterface::class);
     }
 
-    /**
-     * @depends testInstance
-     */
+    #[Depends('testInstance')]
     public function testIndonesianConvert(ConverterInterface $converter): void
     {
         $this->assertEquals('seratus', trim(strtolower($converter->convert(100))));
@@ -50,9 +49,7 @@ class CurrencyFormatTest extends WebTestCase
         $this->assertEquals('seratus idr', trim(strtolower($converter->convert(100, 'IDR'))));
     }
 
-    /**
-     * @depends testInstanceCurrencyFormat
-     */
+    #[Depends('testInstanceCurrencyFormat')]
     public function testCurrency(CurrencyFormatInterface $currencyFormat): void
     {
         $this->assertEquals('IDR', $currencyFormat->getCurrencySymbol());
@@ -64,9 +61,7 @@ class CurrencyFormatTest extends WebTestCase
         $currencyFormat->setCurrency('IDD');
     }
 
-    /**
-     * @depends testInstanceCurrencyFormat
-     */
+    #[Depends('testInstanceCurrencyFormat')]
     public function testParsingCurrency(CurrencyFormatInterface $currencyFormat): void
     {
         $this->assertEquals(10000, $currencyFormat->priceToFloat($currencyFormat->getCurrencySymbol() . '10000'));

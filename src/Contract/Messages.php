@@ -9,7 +9,7 @@ namespace Kematjaya\PriceBundle\Contract;
  */
 class Messages
 {
-    public static function triggerDeprecation(string $package, string $version, string $message, ...$args): void
+    public static function triggerDeprecation(string $package, string $version, string $message, mixed ...$args): void
     {
         $prefix = ('' !== $package || '' !== $version) ? sprintf('Since %s %s: ', $package, $version) : '';
         $formattedMessage = $args ? vsprintf($message, $args) : $message;

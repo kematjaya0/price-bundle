@@ -11,7 +11,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class IndonesianConverter implements ConverterInterface
 {
-    private const WORDS = [
+    private const array WORDS = [
         '', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'delapan', 'sembilan', 'sepuluh', 'sebelas',
     ];
 
@@ -21,17 +21,9 @@ class IndonesianConverter implements ConverterInterface
      * switching to scientific notation or losing digits. Anything above
      * this cannot be split into digits reliably by processNumber().
      */
-    private const MAX_SUPPORTED_NUMBER = 99999999999999.0;
+    private const float MAX_SUPPORTED_NUMBER = 99999999999999.0;
 
-    /**
-     * @var TranslatorInterface|null
-     */
-    private $translator;
-
-    public function __construct(?TranslatorInterface $translator = null)
-    {
-        $this->translator = $translator;
-    }
+    public function __construct(private readonly ?TranslatorInterface $translator = null) {}
 
     public function convert(float $number, ?string $currency = null): string
     {

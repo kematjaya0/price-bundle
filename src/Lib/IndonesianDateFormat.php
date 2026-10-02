@@ -18,18 +18,18 @@ use DateTimeInterface;
  */
 class IndonesianDateFormat extends AbstractDateFormat
 {
-    private const DAYS = [
+    private const array DAYS = [
         'Mon' => 'Senin', 'Tue' => 'Selasa', 'Wed' => 'Rabu', 'Thu' => 'Kamis',
         'Fri' => 'Jumat', 'Sat' => 'Sabtu', 'Sun' => 'Minggu',
     ];
 
-    private const MONTHS = [
+    private const array MONTHS = [
         'Jan' => 'Januari', 'Feb' => 'Februari', 'Mar' => 'Maret', 'Apr' => 'April',
         'May' => 'Mei', 'Jun' => 'Juni', 'Jul' => 'Juli', 'Aug' => 'Agustus',
         'Sep' => 'September', 'Oct' => 'Oktober', 'Nov' => 'November', 'Dec' => 'Desember',
     ];
 
-    private const MONTH_NUMBERS = [
+    private const array MONTH_NUMBERS = [
         '01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' => 'April',
         '05' => 'Mei', '06' => 'Juni', '07' => 'Juli', '08' => 'Agustus',
         '09' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember',

@@ -29,9 +29,7 @@ class PriceExtensionTest extends TestCase
         $twig = $this->createMock(Environment::class);
         $extension = new PriceExtension($currencyFormat, $this->createBag(), $twig);
 
-        $names = array_map(function (TwigFunction $function): string {
-            return $function->getName();
-        }, $extension->getFunctions());
+        $names = array_map(fn(TwigFunction $function): string => $function->getName(), $extension->getFunctions());
 
         $this->assertSame(
             [
@@ -121,10 +119,7 @@ class PriceExtensionTest extends TestCase
         $this->assertSame('$ 1,000.00', $extension->currency(1000, 'USD', 2, '.', ','));
     }
 
-    /**
-     * @return callable
-     */
-    private function findFunctionCallable(PriceExtension $extension, string $name)
+    private function findFunctionCallable(PriceExtension $extension, string $name): callable
     {
         foreach ($extension->getFunctions() as $function) {
             if ($name === $function->getName()) {

@@ -14,21 +14,13 @@ use Twig\TwigFilter;
 
 class DateFormatExtension extends AbstractExtension
 {
-    /**
-     * @var AbstractDateFormat
-     */
-    private $dateFormat;
-
-    public function __construct(AbstractDateFormat $dateFormat)
-    {
-        $this->dateFormat = $dateFormat;
-    }
+    public function __construct(private readonly AbstractDateFormat $dateFormat) {}
 
     public function getFilters(): array
     {
         return [
-            new TwigFilter('date_format', [$this->dateFormat, 'format']),
-            new TwigFilter('date_to_string', [$this->dateFormat, 'convertToString']),
+            new TwigFilter('date_format', $this->dateFormat->format(...)),
+            new TwigFilter('date_to_string', $this->dateFormat->convertToString(...)),
         ];
     }
 }

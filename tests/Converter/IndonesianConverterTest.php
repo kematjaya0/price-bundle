@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Kematjaya\PriceBundle\Tests\Converter;
 
 use Kematjaya\PriceBundle\Converter\IndonesianConverter;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class IndonesianConverterTest extends TestCase
 {
-    /**
-     * @dataProvider provideNumbers
-     */
+    #[DataProvider('provideNumbers')]
     public function testConvertWithoutCurrency(float $number, string $expected): void
     {
         $converter = new IndonesianConverter();

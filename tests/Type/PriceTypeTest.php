@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Kematjaya\PriceBundle\Tests\Type;
 
+use Kematjaya\PriceBundle\Lib\CurrencyFormat;
+use Kematjaya\PriceBundle\Type\PriceType;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -25,30 +28,28 @@ class PriceTypeTest extends TestCase
 
         $container = $this->createMock(ContainerBagInterface::class);
         $container->method('get')->with('price')->willReturn(['currency' => $currencyConfig]);
-        $currencyFormat = new \Kematjaya\PriceBundle\Lib\CurrencyFormat($container);
+        $currencyFormat = new CurrencyFormat($container);
 
         $bag = $this->createMock(ParameterBagInterface::class);
         $bag->method('get')->with('price')->willReturn([
             'currency' => $currencyConfig + ['allow_negative' => $allowNegative],
         ]);
 
-        $priceType = new \Kematjaya\PriceBundle\Type\PriceType($currencyFormat, $bag);
+        $priceType = new PriceType($currencyFormat, $bag);
 
         return Forms::createFormFactoryBuilder()
             ->addExtension(new PreloadedExtension([$priceType], []))
             ->getFormFactory();
     }
 
-    /**
-     * @dataProvider provideFormattedValues
-     */
+    #[DataProvider('provideFormattedValues')]
     public function testSubmitParsesFormattedValueUsingConfiguredScale(string $submitted, float $expected): void
     {
         $factory = $this->createFactory(
             ['code' => 'IDR', 'cent_limit' => 2, 'cent_point' => ',', 'thousand_point' => '.']
         );
 
-        $form = $factory->create(\Kematjaya\PriceBundle\Type\PriceType::class);
+        $form = $factory->create(PriceType::class);
         $form->submit($submitted);
 
         $this->assertTrue($form->isSynchronized());
@@ -71,7 +72,7 @@ class PriceTypeTest extends TestCase
             ['code' => 'IDR', 'cent_limit' => 0, 'cent_point' => ',', 'thousand_point' => '.']
         );
 
-        $form = $factory->create(\Kematjaya\PriceBundle\Type\PriceType::class);
+        $form = $factory->create(PriceType::class);
         $form->submit('IDR 1.235');
 
         $this->assertTrue($form->isSynchronized());
@@ -82,7 +83,7 @@ class PriceTypeTest extends TestCase
     {
         $factory = $this->createFactory(['code' => 'IDR']);
 
-        $form = $factory->create(\Kematjaya\PriceBundle\Type\PriceType::class);
+        $form = $factory->create(PriceType::class);
         $form->submit(null);
 
         $this->assertTrue($form->isSynchronized());
@@ -93,8 +94,8 @@ class PriceTypeTest extends TestCase
     {
         $factory = $this->createFactory(['code' => 'IDR', 'cent_limit' => 0, 'cent_limits' => ['USD' => 2]]);
 
-        $usdForm = $factory->create(\Kematjaya\PriceBundle\Type\PriceType::class, null, ['currency' => 'USD']);
-        $idrForm = $factory->create(\Kematjaya\PriceBundle\Type\PriceType::class, null, ['currency' => 'IDR']);
+        $usdForm = $factory->create(PriceType::class, null, ['currency' => 'USD']);
+        $idrForm = $factory->create(PriceType::class, null, ['currency' => 'IDR']);
 
         $this->assertSame(2, $usdForm->getConfig()->getOption('scale'));
         $this->assertSame(0, $idrForm->getConfig()->getOption('scale'));
@@ -104,7 +105,7 @@ class PriceTypeTest extends TestCase
     {
         $factory = $this->createFactory(['code' => 'IDR']);
 
-        $form = $factory->create(\Kematjaya\PriceBundle\Type\PriceType::class, null, ['scale' => 5]);
+        $form = $factory->create(PriceType::class, null, ['scale' => 5]);
 
         $this->assertSame(5, $form->getConfig()->getOption('scale'));
     }
@@ -115,7 +116,7 @@ class PriceTypeTest extends TestCase
             ['code' => 'USD', 'cent_limit' => 2, 'cent_point' => '.', 'thousand_point' => ',']
         );
 
-        $form = $factory->create(\Kematjaya\PriceBundle\Type\PriceType::class, 5.0, ['currency' => 'USD']);
+        $form = $factory->create(PriceType::class, 5.0, ['currency' => 'USD']);
         $view = $form->createView();
 
         $this->assertSame('5.00', $view->vars['value']);
@@ -124,7 +125,7 @@ class PriceTypeTest extends TestCase
     public function testBuildViewPrependsCurrencyToMoneyPatternWhenMissing(): void
     {
         $factory = $this->createFactory(['code' => 'USD']);
-        $form = $factory->create(\Kematjaya\PriceBundle\Type\PriceType::class, null, ['currency' => 'USD']);
+        $form = $factory->create(PriceType::class, null, ['currency' => 'USD']);
         $view = $form->createView();
 
         $this->assertStringContainsString('USD', $view->vars['money_pattern']);
@@ -133,7 +134,7 @@ class PriceTypeTest extends TestCase
     public function testBuildViewDefaultsAttrWhenNoneGiven(): void
     {
         $factory = $this->createFactory(['code' => 'IDR']);
-        $form = $factory->create(\Kematjaya\PriceBundle\Type\PriceType::class);
+        $form = $factory->create(PriceType::class);
         $view = $form->createView();
 
         // Symfony form component adds inputmode => numeric, so only that is present
@@ -144,7 +145,7 @@ class PriceTypeTest extends TestCase
     public function testBuildViewKeepsCustomAttr(): void
     {
         $factory = $this->createFactory(['code' => 'IDR']);
-        $form = $factory->create(\Kematjaya\PriceBundle\Type\PriceType::class, null, ['attr' => ['class' => 'my-input']]);
+        $form = $factory->create(PriceType::class, null, ['attr' => ['class' => 'my-input']]);
         $view = $form->createView();
 
         // Custom attr replaces default, so no style is added
@@ -155,7 +156,7 @@ class PriceTypeTest extends TestCase
     public function testBuildViewExposesAutoCentFormatCurrencySeparatorsAndAllowNegative(): void
     {
         $factory = $this->createFactory(['code' => 'IDR', 'cent_point' => ',', 'thousand_point' => '.'], false);
-        $form = $factory->create(\Kematjaya\PriceBundle\Type\PriceType::class, null, ['auto_cent_format' => false]);
+        $form = $factory->create(PriceType::class, null, ['auto_cent_format' => false]);
         $view = $form->createView();
 
         $this->assertFalse($view->vars['auto_cent_format']);

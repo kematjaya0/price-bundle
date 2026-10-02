@@ -22,8 +22,15 @@ class DateFormatExtensionTest extends TestCase
         $this->assertCount(2, $filters);
         $this->assertContainsOnlyInstancesOf(TwigFilter::class, $filters);
         $this->assertSame('date_format', $filters[0]->getName());
-        $this->assertSame([$dateFormat, 'format'], $filters[0]->getCallable());
+        $this->assertCallableIs($dateFormat, 'format', $filters[0]->getCallable());
         $this->assertSame('date_to_string', $filters[1]->getName());
-        $this->assertSame([$dateFormat, 'convertToString'], $filters[1]->getCallable());
+        $this->assertCallableIs($dateFormat, 'convertToString', $filters[1]->getCallable());
+    }
+
+    private function assertCallableIs(object $object, string $method, callable $callable): void
+    {
+        $function = new \ReflectionFunction(\Closure::fromCallable($callable));
+        $this->assertSame($object, $function->getClosureThis());
+        $this->assertSame($method, $function->getName());
     }
 }

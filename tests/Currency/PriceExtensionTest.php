@@ -7,6 +7,7 @@ use Kematjaya\PriceBundle\Lib\CurrencyFormatInterface;
 use Kematjaya\PriceBundle\Tests\AppTestKernel;
 use Kematjaya\PriceBundle\Twig\ConverterExtension;
 use Kematjaya\PriceBundle\Twig\PriceExtension;
+use PHPUnit\Framework\Attributes\Depends;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -27,10 +28,8 @@ class PriceExtensionTest extends WebTestCase
         return $container->get(CurrencyFormatInterface::class);
     }
 
-    /**
-     * @depends testInstance
-     */
-    public function testFormatPrice(CurrencyFormatInterface $currencyFormat)
+    #[Depends('testInstance')]
+    public function testFormatPrice(CurrencyFormatInterface $currencyFormat): void
     {
         $bag = $this->createMock(ParameterBagInterface::class);
         $bag->method('get')->with('price')->willReturn([
@@ -39,10 +38,10 @@ class PriceExtensionTest extends WebTestCase
         $twig = $this->createMock(Environment::class);
         $ext = new PriceExtension($currencyFormat, $bag, $twig);
 
-        $this->assertEquals($currencyFormat->getCurrencySymbol().' 10,000', $ext->price(10000));
+        $this->assertEquals($currencyFormat->getCurrencySymbol() . ' 10,000', $ext->price(10000));
     }
 
-    public function testGetTerbilang()
+    public function testGetTerbilang(): void
     {
         $translator = $this->createMock(TranslatorInterface::class);
         $translator->method('trans')->willReturnArgument(0);

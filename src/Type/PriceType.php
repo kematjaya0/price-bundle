@@ -20,19 +20,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class PriceType extends MoneyType
 {
     /**
-     * @var CurrencyFormatInterface
-     */
-    private $currencyFormat;
-
-    /**
      * @var array<string, mixed>
      */
-    private $configs;
+    private readonly array $configs;
 
-    public function __construct(CurrencyFormatInterface $currencyFormat, ParameterBagInterface $bag)
+    public function __construct(private readonly CurrencyFormatInterface $currencyFormat, ParameterBagInterface $bag)
     {
         $this->configs = $bag->get('price')['currency'];
-        $this->currencyFormat = $currencyFormat;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -53,9 +47,7 @@ class PriceType extends MoneyType
         // decimal precision follows config/price.yaml's per-currency
         // cent_limits map (e.g. USD => 2) unless a caller explicitly passes
         // "scale" itself.
-        $resolver->setDefault('scale', function (Options $options): int {
-            return $this->currencyFormat->getCentLimitByCurrency($options['currency']);
-        });
+        $resolver->setDefault('scale', fn(Options $options): int => $this->currencyFormat->getCentLimitByCurrency($options['currency']));
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -64,12 +56,8 @@ class PriceType extends MoneyType
         $currency = $options['currency'];
 
         $builder->addModelTransformer(new CallbackTransformer(
-            function ($value) use ($scale) {
-                return $this->padToScale($value, $scale);
-            },
-            function (?string $value) use ($currency, $scale): float {
-                return $this->parseToFloat($value, $currency, $scale);
-            }
+            fn($value): float|string => $this->padToScale($value, $scale),
+            fn(?string $value): float => $this->parseToFloat($value, $currency, $scale)
         ));
     }
 
@@ -77,7 +65,7 @@ class PriceType extends MoneyType
     {
         parent::buildView($view, $form, $options);
 
-        if (false === strpos($view->vars['money_pattern'], $options['currency'])) {
+        if (!str_contains($view->vars['money_pattern'], $options['currency'])) {
             $view->vars['money_pattern'] = sprintf('%s %s', $options['currency'], $view->vars['money_pattern']);
         }
 
@@ -94,12 +82,8 @@ class PriceType extends MoneyType
     /**
      * Model to view: pads the fractional part of $value with trailing zeros
      * until it has $scale digits (never truncates an already-longer one).
-     *
-     * @param mixed $value
-     *
-     * @return float|string
      */
-    private function padToScale($value, int $scale)
+    private function padToScale(mixed $value, int $scale): float|string
     {
         if (0 === $scale) {
             return round((float) $value);

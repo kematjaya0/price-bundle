@@ -11,20 +11,9 @@ use Symfony\Component\Form\FormEvents;
 
 class PriceEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var CurrencyFormatInterface
-     */
-    private $currencyFormat;
+    private ?string $name = null;
 
-    /**
-     * @var string|null
-     */
-    private $name;
-
-    public function __construct(CurrencyFormatInterface $currencyFormat)
-    {
-        $this->currencyFormat = $currencyFormat;
-    }
+    public function __construct(private readonly CurrencyFormatInterface $currencyFormat) {}
 
     public function setName(string $name): self
     {

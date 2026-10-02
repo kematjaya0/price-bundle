@@ -13,15 +13,7 @@ use Kematjaya\PriceBundle\Converter\ConverterInterface;
 
 abstract class AbstractDateFormat implements DateFormatInterface
 {
-    /**
-     * @var ConverterInterface
-     */
-    protected $converter;
-
-    public function __construct(ConverterInterface $converter)
-    {
-        $this->converter = $converter;
-    }
+    public function __construct(protected readonly ConverterInterface $converter) {}
 
     abstract public function getDayName(string $day): string;
 
@@ -49,17 +41,11 @@ abstract class AbstractDateFormat implements DateFormatInterface
     {
         $result = [];
         foreach (explode($prefix, $format) as $value) {
-            switch ($value) {
-                case 'D':
-                    $result[$value] = $this->getDayName($date->format('D'));
-                    break;
-                case 'M':
-                    $result[$value] = $this->getMonthName($date->format('M'));
-                    break;
-                default:
-                    $result[$value] = $date->format($value);
-                    break;
-            }
+            $result[$value] = match ($value) {
+                'D' => $this->getDayName($date->format('D')),
+                'M' => $this->getMonthName($date->format('M')),
+                default => $date->format($value),
+            };
         }
 
         return $result;
@@ -92,7 +78,7 @@ abstract class AbstractDateFormat implements DateFormatInterface
     {
         $matched = null;
         foreach ($this->prefix() as $candidate) {
-            if (false !== strpos($format, $candidate)) {
+            if (str_contains($format, $candidate)) {
                 $matched = $candidate;
             }
         }

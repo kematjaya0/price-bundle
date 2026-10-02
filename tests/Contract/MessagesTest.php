@@ -12,7 +12,7 @@ class MessagesTest extends TestCase
     /**
      * @var array<int, array{int, string}>
      */
-    private $triggeredErrors;
+    private array $triggeredErrors;
 
     protected function setUp(): void
     {
@@ -21,7 +21,7 @@ class MessagesTest extends TestCase
 
     public function testTriggerDeprecationWithPackageAndVersion(): void
     {
-        $this->captureDeprecation(function () {
+        $this->captureDeprecation(function (): void {
             Messages::triggerDeprecation('kematjaya/price-bundle', '2.0', 'field %s is removed', 'currency');
         });
 
@@ -33,7 +33,7 @@ class MessagesTest extends TestCase
 
     public function testTriggerDeprecationWithoutArgsSkipsVsprintf(): void
     {
-        $this->captureDeprecation(function () {
+        $this->captureDeprecation(function (): void {
             Messages::triggerDeprecation('kematjaya/price-bundle', '2.0', 'plain message');
         });
 
@@ -45,7 +45,7 @@ class MessagesTest extends TestCase
 
     public function testTriggerDeprecationWithoutPackageOrVersionOmitsPrefix(): void
     {
-        $this->captureDeprecation(function () {
+        $this->captureDeprecation(function (): void {
             Messages::triggerDeprecation('', '', 'plain message');
         });
 
